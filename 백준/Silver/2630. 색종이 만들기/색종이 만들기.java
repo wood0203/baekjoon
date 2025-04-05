@@ -27,9 +27,11 @@ public class Main {
 	
 	static void check(int x, int y, int size) {
 		boolean isAllSame = true;
+        int maxX = x + size;
+        int maxY = y + size;
 		Outter:
-		for (int i = x; i < x + size; i++) {
-			for (int j = y; j < y + size; j++) {
+		for (int i = x; i < maxX; i++) {
+			for (int j = y; j < maxY; j++) {
 				if (papers[x][y] != papers[i][j]) {
 					isAllSame = false;
 					break Outter;
