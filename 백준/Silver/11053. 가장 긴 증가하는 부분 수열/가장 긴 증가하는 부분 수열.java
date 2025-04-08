@@ -12,13 +12,13 @@ public class Main {
 		int[] arr = new int[N];
 		for (int i = 0; i < N; i++) {
 			arr[i] = Integer.parseInt(st.nextToken());
-			LIS[i] = 1;
 		}
-		
+
 		int answer = 0;
-		for (int i = 0; i < arr.length; i++) {
+		for (int i = 0; i < N; i++) {
+			LIS[i] = 1;
 			for (int j = 0; j < i; j++) {
-				if (arr[j] < arr[i] && LIS[i] < LIS[j] + 1) {
+				if ((arr[j] < arr[i]) && (LIS[i] < LIS[j] + 1)) {
 					LIS[i] = LIS[j] + 1;
 				}
 			}
