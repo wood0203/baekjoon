@@ -10,6 +10,7 @@ public class Main {
 	static HashMap<Integer, Integer> ladders = new HashMap<>();
 	static HashMap<Integer, Integer> snakes = new HashMap<>();
 	static int N, M, answer = 99;
+	static boolean[] visited = new boolean[100];
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -35,6 +36,8 @@ public class Main {
 				return;
 			}
 			
+			if (visited[p[0]]) continue;
+			
 			int straight = 1;
 			for (int i = 1; i <= 6; i++) {
 				if (snakes.get(p[0] + i) != null) continue;
@@ -47,7 +50,8 @@ public class Main {
 				if (p[0] + i <= 100)
 					straight = Integer.max(straight, i);
 			}
-			
+
+			visited[p[0]] = true;
 			queue.offer(new int[] {straight + p[0], p[1] + 1});
 		}
 	}
