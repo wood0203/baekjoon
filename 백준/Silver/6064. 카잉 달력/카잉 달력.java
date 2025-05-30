@@ -10,42 +10,37 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int T = Integer.parseInt(br.readLine());
 		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < T; i++) {
+		for (int testCase = 0; testCase < T; testCase++) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			int M = Integer.parseInt(st.nextToken());
 			int N = Integer.parseInt(st.nextToken());
-			int x = Integer.parseInt(st.nextToken());
-			int y = Integer.parseInt(st.nextToken());
-
-			long end = M * N / gcd(Integer.max(M, N), Integer.min(M, N));
-			HashSet<Long> indexes = new HashSet<>();
-			long value = x;
-			indexes.add(value);
-			while (value <= end) {
-				value += M;
-				indexes.add(value);
-			}
+			int x = Integer.parseInt(st.nextToken()) - 1;
+			int y = Integer.parseInt(st.nextToken()) - 1;
 			
-			long answer = -1;
-			long value2 = y;
-			while (value2 <= end) {
-				if (indexes.contains(value2)) {
-					answer = value2;
+			int year = x;
+			int maxValue = M * N / gcd(M, N);
+			int answer = -1;
+			while (year <= maxValue) {
+				if (year % N == y) {
+					answer = year + 1;
+					break;
 				}
-				value2 += N;
+				
+				year += M;
 			}
 			
 			sb.append(answer).append("\n");
 		}
 		
 		System.out.println(sb.toString());
-
+		
 	}
 	
-	public static int gcd(int a, int b) {
+	static int gcd(int a, int b) {
 		if (b == 0) return a;
-
+		
 		return gcd(b, a % b);
 	}
+
 
 }
