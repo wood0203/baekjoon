@@ -7,7 +7,6 @@ public class Main {
     static int[] nums, current;
     static StringBuilder sb = new StringBuilder();
     static boolean[] visited;
-    static HashSet<String> made = new HashSet<>();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -29,22 +28,20 @@ public class Main {
 
     static void combi(int index, int cnt) {
         if (cnt == M) {
-            String temp = "";
             for (int t: current) {
-                temp += (t + " ");
+                sb.append(t).append(" ");
             }
-            
-            if (made.contains(temp)) return;
-            made.add(temp);
-            sb.append(temp).append("\n");
+            sb.append("\n");
             return;
         }
 
+        int before = 0;
         for (int i = 0; i < nums.length; i++) {
-            if (visited[i]) continue;
+            if (visited[i] || before == nums[i]) continue;
 
             current[cnt] = nums[i];
             visited[i] = true;
+            before = nums[i];
             combi(index + 1, cnt + 1);
             current[cnt] = 0;
             visited[i] = false;
