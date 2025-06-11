@@ -5,50 +5,46 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] nk = br.readLine().split(" ");
-        int n = Integer.parseInt(nk[0]);
-        int k = Integer.parseInt(nk[1]);
-        int answer = Integer.MAX_VALUE;
-        int[] dist = new int[200001];
-        Arrays.fill(dist, Integer.MAX_VALUE);
-        dist[n] = 0;
-        int cnt = 0;
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+        int K = Integer.parseInt(st.nextToken());
+        int[][] dp = new int[K + 1][2];
 
-        Queue<int[]> queue = new ArrayDeque<>();
-        queue.offer(new int[] {n, 0});
-        while (!queue.isEmpty()) {
-            int[] p = queue.poll();
+        if (K <= N) {
+            System.out.println(N - K);
+            System.out.println(1);
+            return;
+        }
 
-            if (p[0] == k) {
-                answer = p[1];
-                dist[k] = p[1];
-                cnt++;
-                continue;
-            }
+        for (int i = 0; i <= N; i++) {
+            dp[i][0] = N - i;
+            dp[i][1] = 1;
+        }
 
-            if (p[1] > answer) continue;
+        for (int i = N + 1; i <= K; i++) {
+            dp[i][0] = dp[i - 1][0] + 1;
+            dp[i][1] = dp[i - 1][1];
 
-            int temp = p[0] - 1;
-            if (temp >= 0 && p[1] + 1 <= dist[temp]) {
-                dist[temp] = p[1] + 1;
-                queue.offer(new int[] {temp, p[1] + 1});
-            }
-
-            int temp2 = p[0] + 1;
-            if (temp2 <= 100000 && p[1] + 1 <= dist[temp2]) {
-                dist[temp2] = p[1] + 1;
-                queue.offer(new int[] {temp2, p[1] + 1});
-            }
-            
-            int temp3 = p[0] * 2;
-            if (0 <= temp3 && temp3 <= 200001 && p[1] + 1 <= dist[temp3]) {
-                dist[temp3] = p[1] + 1;
-                queue.offer(new int[] {temp3, p[1] + 1});
+            if (i % 2 == 0) {
+                if (dp[i / 2][0] + 1 < dp[i][0]) {
+                    dp[i][0] = dp[i / 2][0] + 1;
+                    dp[i][1] = dp[i / 2][1];
+                } else if (dp[i / 2][0] + 1 == dp[i][0]) {
+                    dp[i][1] += dp[i / 2][1];
+                }
+            } else {
+                if (dp[(i + 1) / 2][0] + 2 < dp[i][0]) {
+                    dp[i][0] = dp[(i + 1) / 2][0] + 2;
+                    dp[i][1] = dp[(i + 1) / 2][1];
+                } else if (dp[(i + 1) / 2][0] + 2 == dp[i][0]) {
+                    dp[i][1] += dp[(i + 1) / 2][1];
+                }
             }
         }
 
-        System.out.println(answer);
-        System.out.println(cnt);
+        System.out.println(dp[K][0]);
+        System.out.println(dp[K][1]);
+
     }
 
 }
