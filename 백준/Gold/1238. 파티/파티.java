@@ -49,6 +49,10 @@ public class Main {
         pq.offer(new Node(X, 0));
         while (!pq.isEmpty()) {
             Node curNode = pq.poll();
+
+            if (curNode.time > dist[curNode.index]) 
+                continue;
+
             for (int[] next: graph[curNode.index]) {
                 int nextTime = curNode.time + next[1];
                 if (dist[next[0]] < nextTime) continue;
@@ -65,6 +69,10 @@ public class Main {
         pq.offer(new Node(X, 0));
         while (!pq.isEmpty()) {
             Node curNode = pq.poll();
+
+            if (curNode.time > rDist[curNode.index]) 
+                continue;
+
             for (int[] next: rGraph[curNode.index]) {
                 int nextTime = curNode.time + next[1];
                 if (rDist[next[0]] < nextTime) continue;
