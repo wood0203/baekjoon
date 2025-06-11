@@ -6,16 +6,16 @@ public class Main {
     static class Node implements Comparable<Node> {
         
         int index;
-        int weight;
+        int dist;
 
-        Node(int index, int weight) {
+        Node(int index, int dist) {
             this.index = index;
-            this.weight = weight;
+            this.dist = dist;
         }
 
         @Override
         public int compareTo(Node n) {
-            return Integer.compare(this.weight, n.weight);
+            return this.dist - n.dist;
         }
 
     }
@@ -24,21 +24,18 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
         int M = Integer.parseInt(br.readLine());
-        boolean[] visited = new boolean[N + 1];
         int[] dist = new int[N + 1];
-        ArrayList<ArrayList<int[]>> graph = new ArrayList<>();
-
-        for (int i = 0; i <= N; i++) {
-            graph.add(new ArrayList<>());
-            dist[i] = Integer.MAX_VALUE;
-        }
+        ArrayList<int[]>[] graph = new ArrayList[N + 1];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        for (int i = 1; i <= N; i++)
+            graph[i] = new ArrayList<>();
 
         for (int i = 0; i < M; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
             int start = Integer.parseInt(st.nextToken());
             int end = Integer.parseInt(st.nextToken());
             int weight = Integer.parseInt(st.nextToken());
-            graph.get(start).add(new int[] {end, weight});
+            graph[start].add(new int[] {end, weight});
         }
 
         String[] se = br.readLine().split(" ");
@@ -51,18 +48,14 @@ public class Main {
         while (!pq.isEmpty()) {
             Node curNode = pq.poll();
             if (curNode.index == end) {
-                System.out.println(curNode.weight);
+                System.out.println(curNode.dist);
                 return;
             }
 
-            if (visited[curNode.index]) continue;
+            if (curNode.dist > dist[curNode.index]) continue;
 
-            visited[curNode.index] = true;
-
-            if (curNode.weight > dist[curNode.index]) continue;
-
-            for (int[] next: graph.get(curNode.index)) {
-                int newWeight = curNode.weight + next[1];
+            for (int[] next: graph[curNode.index]) {
+                int newWeight = curNode.dist + next[1];
                 if (newWeight < dist[next[0]]) {
                     dist[next[0]] = newWeight;
                     pq.offer(new Node(next[0], newWeight));
