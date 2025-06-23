@@ -19,13 +19,11 @@ public class Main {
         StringTokenizer truthSt = new StringTokenizer(br.readLine());
         int truthCnt = Integer.parseInt(truthSt.nextToken());
         truth = new int[truthCnt];
-        if (truth.length >= 1) {
             for (int i = 0; i < truth.length; i++) {
                 truth[i] = Integer.parseInt(truthSt.nextToken());
                 if (i >= 1)
-                    union(find(truth[i]), find(truth[i - 1]));
+                    union(truth[i], truth[i - 1]);
             }
-        }
 
         for (int i = 0; i < M; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
@@ -33,7 +31,7 @@ public class Main {
             for (int j = 0; j < party.length; j++) {
                 party[j] = Integer.parseInt(st.nextToken());
                 if (j >= 1)
-                    union(find(party[j]), find(party[j - 1]));
+                    union(party[j], party[j - 1]);
             }
             parties.add(party);
         }
@@ -44,10 +42,11 @@ public class Main {
         }
 
         int answer = 0;
+        int truthRoot = find(truth[0]);
         for (int[] party: parties) {
             boolean isTruthKnowed = false;
             for (int p: party) {
-                if (find(p) == find(truth[0])) {
+                if (find(p) == truthRoot) {
                     isTruthKnowed = true;
                     break;
                 }
