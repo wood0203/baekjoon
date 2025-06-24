@@ -3,7 +3,7 @@ import java.io.*;
 
 public class Main {
 
-    static int N, M, W, INF = Integer.MAX_VALUE;
+    static int N, M, W, INF = 987654321;
     static int[] dist;
     static StringBuilder sb = new StringBuilder();
     static ArrayList<ArrayList<int[]>> graph = new ArrayList<>();
@@ -41,34 +41,23 @@ public class Main {
                 graph.get(s).add(new int[] {e, -t});
             }
 
-            boolean isBelmanford = false;
-            for (int i = 1; i <= N; i++) {
-                if (belmanford(i)) {
-                    isBelmanford = true;
-                    break;
-                }
-            }
-
-            if (isBelmanford)
-                sb.append("YES");
-            else
-                sb.append("NO");
-            sb.append("\n");
+            String answer = belmanford() ? "YES" : "NO";
+            sb.append(answer).append("\n");
         }
 
         System.out.println(sb.toString());
     }
 
-    public static boolean belmanford(int start) {
+    public static boolean belmanford() {
         Arrays.fill(dist, INF);
-        dist[start] = 0;
+        dist[1] = 0;
         boolean update = false;
         for (int i = 1; i <= N; i++) {
             update = false;
             for (int j = 1; j <= N; j++) {
                 for (int[] next: graph.get(j)) {
                     int newDist = dist[j] + next[1];
-                    if (dist[j] != INF && newDist < dist[next[0]]) {
+                    if (newDist < dist[next[0]]) {
                         dist[next[0]] = newDist;
                         update = true;
                     }
@@ -82,7 +71,7 @@ public class Main {
             for (int j = 1; j <= N; j++) {
                 for (int[] next: graph.get(j)) {
                     int newDist = dist[j] + next[1];
-                    if (dist[j] != INF && newDist < dist[next[0]]) {
+                    if (newDist < dist[next[0]]) {
                         return true;
                     }
                 }
