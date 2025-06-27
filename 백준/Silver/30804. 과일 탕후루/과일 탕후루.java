@@ -1,43 +1,41 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
 public class Main {
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int N = Integer.parseInt(br.readLine());
-		int[] fruits = new int[N];
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		for (int i = 0; i < N; i++) {
-			fruits[i] = Integer.parseInt(st.nextToken());
-		}
-		
-		int start = 0; 
-		int end = 0;
-		int answer = 0;
-		HashMap<Integer, Integer> types = new HashMap<>();
-		while (end < N) {
-			// 현재 end위치 포함시 2개 이상일 경우 -> start += 1
-			if (types.get(fruits[end]) == null && types.keySet().size() == 2) {
-				int remainCnt = types.get(fruits[start]);
-				if (remainCnt == 1) {
-					types.remove(fruits[start]);
-				} else {
-					types.put(fruits[start], remainCnt - 1);
-				}
-				start += 1;
-			} else {
-				int fruitCnt = types.getOrDefault(fruits[end], 0) + 1;
-				types.put(fruits[end], fruitCnt);
-				answer = Integer.max(answer, end - start + 1);
-				end += 1;
-			}
-		}
-		
-		System.out.println(answer);
-	}
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+        if (N <= 2) {
+            System.out.println(N);
+            return;
+        }
 
+        String[] input = br.readLine().split(" ");
+        int[] fruits = new int[input.length];
+        for (int i = 0; i < N; i++) {
+            fruits[i] = input[i].charAt(0) - '0';
+        }
+
+        int[] cnt = new int[10];
+        int start = 0;
+        cnt[fruits[start]]++;
+        int end = 1;
+        int answer = 2;
+        int typeCnt = 1;
+        while (end < fruits.length) {
+            int fruit = fruits[end];
+            if (typeCnt == 2 && cnt[fruit] == 0) {
+                cnt[fruits[start]]--;
+                if (cnt[fruits[start++]] == 0) typeCnt--;
+                continue;
+            }
+
+            if (cnt[fruit] == 0) typeCnt++;
+            cnt[fruit]++;
+            answer = Integer.max(end++ - start + 1, answer);
+        }
+
+        System.out.println(answer);
+    }
 }
