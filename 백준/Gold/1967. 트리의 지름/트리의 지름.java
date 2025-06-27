@@ -13,18 +13,19 @@ public class Main {
         }
     }
 
-    static int N;
+    static int N, answer;
     static List<Edge>[] edges;
     static boolean[] visited;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
+        visited = new boolean[N + 1];
         if (N == 1) {
             System.out.println(0);
             return;
         }
-        
+
         edges = new ArrayList[N + 1];
         for (int i = 1; i <= N; i++)
             edges[i] = new ArrayList<>();
@@ -38,33 +39,28 @@ public class Main {
             edges[to].add(new Edge(from, weight));
         }
 
-        
-        int x = bfs(1)[0];
-        System.out.println(bfs(x)[1]);
+        dfs(1);
+        System.out.println(answer);
     }
 
-    static int[] bfs(int start) {
-        visited = new boolean[N + 1];
-        Queue<int[]> queue = new ArrayDeque<>();
-        queue.offer(new int[] {start, 0});
+    static int dfs(int start) {
         visited[start] = true;
-        int farNode = start;
-        int farDist = 0;
-        while (!queue.isEmpty()) {
-            int[] p = queue.poll();
-            if (p[1] > farDist) {
-                farDist = p[1];
-                farNode = p[0];
-            }
 
-            for (Edge e: edges[p[0]]) {
-                if (visited[e.to]) continue;
+        int max1 = 0;
+        int max2 = 0;
+        for (Edge e: edges[start]) {
+            if (visited[e.to]) continue;
 
-                visited[e.to] = true;
-                queue.offer(new int[] {e.to, p[1] + e.weight});
+            int dist = dfs(e.to) + e.weight;
+            if (dist > max1) {
+                max2 = max1;
+                max1 = dist;
+            } else if (dist > max2) {
+                max2 = dist;
             }
         }
 
-        return new int[] {farNode, farDist};
-    } 
+        answer = Integer.max(answer, max1 + max2);
+        return max1;
+    }
 }
